@@ -1,0 +1,39 @@
+# Maintainer: Mario Giustiniani <mariogiustiniani@gmail.com>
+pkgname=synapse-editor
+pkgver=0.1.0.alpha4
+pkgrel=1
+pkgdesc='Lossless Editor-owned Markdown mutation provider for Synapse'
+arch=('x86_64')
+url='https://github.com/synapse-linux/synapse-editor'
+license=('MIT')
+depends=('glibc' 'json-c' 'openssl')
+makedepends=('gcc' 'make' 'pkgconf')
+checkdepends=('python')
+options=('!lto' '!debug')
+_repo=synapse-editor
+_commit=ac0867a3b431663f491c8dd7234bcc6197c408ef
+_source_date_epoch=1788035241
+source=("$pkgname-$_commit.tar.gz::https://codeload.github.com/synapse-linux/$_repo/tar.gz/$_commit")
+sha256sums=('ebba1e2b8780c10fdc74c13f1e1850d41230814c73f3d23102df4ed9fe29ff66')
+
+_baseline_cflags='-O2 -g -std=c17 -Wall -Wextra -Wpedantic -Werror -fstack-protector-strong -fPIE -march=x86-64 -mtune=generic'
+_baseline_ldflags='-Wl,-z,relro,-z,now -pie'
+
+build() {
+  cd "$_repo-$_commit"
+  make clean
+  SOURCE_DATE_EPOCH="$_source_date_epoch" make all \
+    CPPFLAGS='-D_FORTIFY_SOURCE=3' \
+    CFLAGS="$_baseline_cflags" \
+    LDFLAGS="$_baseline_ldflags"
+}
+
+check() {
+  cd "$_repo-$_commit"
+  SOURCE_DATE_EPOCH="$_source_date_epoch" make test
+}
+
+package() {
+  cd "$_repo-$_commit"
+  make DESTDIR="$pkgdir" PREFIX=/usr install
+}

@@ -1,0 +1,26 @@
+pkgbase = synapse-knowledge-gui
+	pkgdesc = Standalone Qt 6 client for Synapse Knowledge providers
+	pkgver = 0.1.0.alpha5
+	pkgrel = 1
+	url = https://github.com/synapse-linux/synapse-knowledge-gui
+	arch = x86_64
+	license = MIT
+	checkdepends = util-linux
+	makedepends = gcc
+	makedepends = make
+	makedepends = pkgconf
+	makedepends = python
+	makedepends = qt6-tools
+	depends = glibc
+	depends = gcc-libs
+	depends = qt6-base
+	depends = synapse-knowledge
+	depends = synapse-editor
+	depends = synapse-doc
+	depends = synapse-chart
+	options = !lto
+	options = !debug
+	source = synapse-knowledge-gui-59985baef8b8df6477407f2572e6e152def20629.tar.gz::https://codeload.github.com/synapse-linux/synapse-knowledge-gui/tar.gz/59985baef8b8df6477407f2572e6e152def20629
+	sha256sums = 2d3279b8be79ed1d398bb65df8b8ac8af2582cbddcca88e59fb7d4c7348f8aa4
+
+pkgname = synapse-knowledge-gui

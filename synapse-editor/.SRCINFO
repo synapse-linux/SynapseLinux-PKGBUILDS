@@ -1,0 +1,20 @@
+pkgbase = synapse-editor
+	pkgdesc = Lossless Editor-owned Markdown mutation provider for Synapse
+	pkgver = 0.1.0.alpha4
+	pkgrel = 1
+	url = https://github.com/synapse-linux/synapse-editor
+	arch = x86_64
+	license = MIT
+	checkdepends = python
+	makedepends = gcc
+	makedepends = make
+	makedepends = pkgconf
+	depends = glibc
+	depends = json-c
+	depends = openssl
+	options = !lto
+	options = !debug
+	source = synapse-editor-ac0867a3b431663f491c8dd7234bcc6197c408ef.tar.gz::https://codeload.github.com/synapse-linux/synapse-editor/tar.gz/ac0867a3b431663f491c8dd7234bcc6197c408ef
+	sha256sums = ebba1e2b8780c10fdc74c13f1e1850d41230814c73f3d23102df4ed9fe29ff66
+
+pkgname = synapse-editor

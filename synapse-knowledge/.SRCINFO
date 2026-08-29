@@ -1,0 +1,24 @@
+pkgbase = synapse-knowledge
+	pkgdesc = Private indexed Markdown knowledge provider for Synapse
+	pkgver = 0.1.0.alpha5
+	pkgrel = 1
+	url = https://github.com/synapse-linux/synapse-knowledge
+	arch = x86_64
+	license = MIT
+	checkdepends = python
+	checkdepends = util-linux
+	makedepends = gcc
+	makedepends = make
+	makedepends = pkgconf
+	depends = glibc
+	depends = libsynapse-core
+	depends = json-c
+	depends = openssl
+	depends = sqlite
+	depends = synapse-doc
+	options = !lto
+	options = !debug
+	source = synapse-knowledge-6bd8580bb62b15a72f91184b5bc7104c8c4359f6.tar.gz::https://codeload.github.com/synapse-linux/synapse-knowledge/tar.gz/6bd8580bb62b15a72f91184b5bc7104c8c4359f6
+	sha256sums = ac05a424bbc6084625420ee3452703d23534409913745da48aeb11a85ce63404
+
+pkgname = synapse-knowledge

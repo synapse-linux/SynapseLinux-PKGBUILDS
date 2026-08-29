@@ -1,0 +1,17 @@
+pkgbase = libsynapse-core
+	pkgdesc = Bounded C support library for Synapse first-party applications
+	pkgver = 0.1.0.alpha1
+	pkgrel = 1
+	url = https://github.com/synapse-linux/libsynapse-core
+	arch = x86_64
+	license = MIT
+	makedepends = gcc
+	makedepends = make
+	depends = glibc
+	provides = libsynapse-core.so=0-64
+	options = !lto
+	options = !debug
+	source = libsynapse-core-386ae7cf6c29d5e09081ad5fc5d13a10086961f8.tar.gz::https://codeload.github.com/synapse-linux/libsynapse-core/tar.gz/386ae7cf6c29d5e09081ad5fc5d13a10086961f8
+	sha256sums = 8cb5f0be2146cfebdb05f178441b21059c1cb4b434fbd5792fc4ba5718c008d6
+
+pkgname = libsynapse-core

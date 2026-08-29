@@ -1,0 +1,26 @@
+pkgbase = synapse-doc
+	pkgdesc = Bounded console-first Markdown semantic parser and viewer
+	pkgver = 0.1.0.alpha2
+	pkgrel = 1
+	url = https://github.com/synapse-linux/synapse-doc
+	arch = x86_64
+	license = MIT
+	checkdepends = python
+	checkdepends = nodejs
+	checkdepends = util-linux
+	checkdepends = desktop-file-utils
+	makedepends = gcc
+	makedepends = make
+	makedepends = pkgconf
+	depends = glibc
+	depends = libsynapse-core
+	depends = json-c
+	depends = openssl
+	depends = ncurses
+	optdepends = foot: graphical terminal launch
+	options = !lto
+	options = !debug
+	source = synapse-doc-87d27dc48f379c63158c17dabf0f844200a5923c.tar.gz::https://codeload.github.com/synapse-linux/synapse-doc/tar.gz/87d27dc48f379c63158c17dabf0f844200a5923c
+	sha256sums = 4628b70ad09ca770b8cce30f26481479018c21356114098c2c7e5d2ac3069a9c
+
+pkgname = synapse-doc

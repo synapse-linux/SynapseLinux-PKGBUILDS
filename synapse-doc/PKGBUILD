@@ -1,0 +1,48 @@
+# Maintainer: Mario Giustiniani <mariogiustiniani@gmail.com>
+pkgname=synapse-doc
+pkgver=0.1.0.alpha2
+pkgrel=1
+pkgdesc='Bounded console-first Markdown semantic parser and viewer'
+arch=('x86_64')
+url='https://github.com/synapse-linux/synapse-doc'
+license=('MIT')
+depends=('glibc' 'libsynapse-core' 'json-c' 'openssl' 'ncurses')
+makedepends=('gcc' 'make' 'pkgconf')
+checkdepends=('python' 'nodejs' 'util-linux' 'desktop-file-utils')
+optdepends=('foot: graphical terminal launch')
+options=('!lto' '!debug')
+_repo=synapse-doc
+_commit=87d27dc48f379c63158c17dabf0f844200a5923c
+_source_date_epoch=1788035241
+source=("$pkgname-$_commit.tar.gz::https://codeload.github.com/synapse-linux/$_repo/tar.gz/$_commit")
+sha256sums=('4628b70ad09ca770b8cce30f26481479018c21356114098c2c7e5d2ac3069a9c')
+
+_baseline_cflags='-O2 -g -std=c17 -Wall -Wextra -Wpedantic -Werror -fstack-protector-strong -fPIE -march=x86-64 -mtune=generic'
+_baseline_ldflags='-Wl,-z,relro,-z,now -pie'
+
+_core_args() {
+  CORE_ARGS=()
+  [[ -z ${SYNAPSE_CORE_ROOT:-} ]] || CORE_ARGS+=(CORE_ROOT="$SYNAPSE_CORE_ROOT")
+}
+
+build() {
+  cd "$_repo-$_commit"
+  _core_args
+  make clean "${CORE_ARGS[@]}"
+  SOURCE_DATE_EPOCH="$_source_date_epoch" make all "${CORE_ARGS[@]}" \
+    CPPFLAGS='-D_FORTIFY_SOURCE=3' \
+    CFLAGS="$_baseline_cflags" \
+    LDFLAGS="$_baseline_ldflags"
+}
+
+check() {
+  cd "$_repo-$_commit"
+  _core_args
+  SOURCE_DATE_EPOCH="$_source_date_epoch" make test "${CORE_ARGS[@]}"
+}
+
+package() {
+  cd "$_repo-$_commit"
+  _core_args
+  make DESTDIR="$pkgdir" PREFIX=/usr install "${CORE_ARGS[@]}"
+}

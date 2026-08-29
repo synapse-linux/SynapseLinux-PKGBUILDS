@@ -1,0 +1,45 @@
+# Maintainer: Mario Giustiniani <mariogiustiniani@gmail.com>
+pkgname=libsynapse-core
+pkgver=0.1.0.alpha1
+pkgrel=1
+pkgdesc='Bounded C support library for Synapse first-party applications'
+arch=('x86_64')
+url='https://github.com/synapse-linux/libsynapse-core'
+license=('MIT')
+depends=('glibc')
+makedepends=('gcc' 'make')
+provides=('libsynapse-core.so=0-64')
+options=('!lto' '!debug')
+_repo=libsynapse-core
+_commit=386ae7cf6c29d5e09081ad5fc5d13a10086961f8
+_source_date_epoch=1788035241
+source=("$pkgname-$_commit.tar.gz::https://codeload.github.com/synapse-linux/$_repo/tar.gz/$_commit")
+sha256sums=('8cb5f0be2146cfebdb05f178441b21059c1cb4b434fbd5792fc4ba5718c008d6')
+
+_baseline_cflags='-O2 -g -std=c11 -Wall -Wextra -Wpedantic -Werror -fstack-protector-strong -fPIC -march=x86-64 -mtune=generic'
+_baseline_ldflags='-Wl,-z,relro,-z,now'
+
+build() {
+  cd "$_repo-$_commit"
+  make clean
+  SOURCE_DATE_EPOCH="$_source_date_epoch" make all \
+    CPPFLAGS='-D_FORTIFY_SOURCE=3' \
+    CFLAGS="$_baseline_cflags" \
+    LDFLAGS="$_baseline_ldflags"
+}
+
+check() {
+  cd "$_repo-$_commit"
+  SOURCE_DATE_EPOCH="$_source_date_epoch" make test \
+    CPPFLAGS='-D_FORTIFY_SOURCE=3' \
+    CFLAGS="$_baseline_cflags" \
+    LDFLAGS="$_baseline_ldflags"
+}
+
+package() {
+  cd "$_repo-$_commit"
+  make DESTDIR="$pkgdir" PREFIX=/usr install
+  install -D -m 0644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -D -m 0644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+  install -D -m 0644 CHANGELOG.md "$pkgdir/usr/share/doc/$pkgname/CHANGELOG.md"
+}

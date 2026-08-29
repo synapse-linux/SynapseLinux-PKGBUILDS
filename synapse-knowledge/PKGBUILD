@@ -1,0 +1,47 @@
+# Maintainer: Mario Giustiniani <mariogiustiniani@gmail.com>
+pkgname=synapse-knowledge
+pkgver=0.1.0.alpha5
+pkgrel=1
+pkgdesc='Private indexed Markdown knowledge provider for Synapse'
+arch=('x86_64')
+url='https://github.com/synapse-linux/synapse-knowledge'
+license=('MIT')
+depends=('glibc' 'libsynapse-core' 'json-c' 'openssl' 'sqlite' 'synapse-doc')
+makedepends=('gcc' 'make' 'pkgconf')
+checkdepends=('python' 'util-linux')
+options=('!lto' '!debug')
+_repo=synapse-knowledge
+_commit=6bd8580bb62b15a72f91184b5bc7104c8c4359f6
+_source_date_epoch=1788035241
+source=("$pkgname-$_commit.tar.gz::https://codeload.github.com/synapse-linux/$_repo/tar.gz/$_commit")
+sha256sums=('ac05a424bbc6084625420ee3452703d23534409913745da48aeb11a85ce63404')
+
+_baseline_cflags='-O2 -g -std=c17 -Wall -Wextra -Wpedantic -Werror -fstack-protector-strong -fPIE -march=x86-64 -mtune=generic'
+_baseline_ldflags='-Wl,-z,relro,-z,now -pie'
+
+_core_args() {
+  CORE_ARGS=()
+  [[ -z ${SYNAPSE_CORE_ROOT:-} ]] || CORE_ARGS+=(CORE_ROOT="$SYNAPSE_CORE_ROOT")
+}
+
+build() {
+  cd "$_repo-$_commit"
+  _core_args
+  make clean "${CORE_ARGS[@]}"
+  SOURCE_DATE_EPOCH="$_source_date_epoch" make all "${CORE_ARGS[@]}" \
+    CPPFLAGS='-D_FORTIFY_SOURCE=3' \
+    CFLAGS="$_baseline_cflags" \
+    LDFLAGS="$_baseline_ldflags"
+}
+
+check() {
+  cd "$_repo-$_commit"
+  _core_args
+  SOURCE_DATE_EPOCH="$_source_date_epoch" make test "${CORE_ARGS[@]}"
+}
+
+package() {
+  cd "$_repo-$_commit"
+  _core_args
+  make DESTDIR="$pkgdir" PREFIX=/usr install "${CORE_ARGS[@]}"
+}

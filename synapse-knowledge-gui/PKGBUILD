@@ -1,0 +1,39 @@
+# Maintainer: Mario Giustiniani <mariogiustiniani@gmail.com>
+pkgname=synapse-knowledge-gui
+pkgver=0.1.0.alpha5
+pkgrel=1
+pkgdesc='Standalone Qt 6 client for Synapse Knowledge providers'
+arch=('x86_64')
+url='https://github.com/synapse-linux/synapse-knowledge-gui'
+license=('MIT')
+depends=('glibc' 'gcc-libs' 'qt6-base' 'synapse-knowledge' 'synapse-editor' 'synapse-doc' 'synapse-chart')
+makedepends=('gcc' 'make' 'pkgconf' 'python' 'qt6-tools')
+checkdepends=('util-linux')
+options=('!lto' '!debug')
+_repo=synapse-knowledge-gui
+_commit=59985baef8b8df6477407f2572e6e152def20629
+_source_date_epoch=1788035241
+source=("$pkgname-$_commit.tar.gz::https://codeload.github.com/synapse-linux/$_repo/tar.gz/$_commit")
+sha256sums=('2d3279b8be79ed1d398bb65df8b8ac8af2582cbddcca88e59fb7d4c7348f8aa4')
+
+_baseline_cxxflags='-O2 -g -std=c++17 -Wall -Wextra -Wpedantic -Werror -fstack-protector-strong -fPIC -march=x86-64 -mtune=generic'
+_baseline_ldflags='-Wl,-z,relro,-z,now -pie'
+
+build() {
+  cd "$_repo-$_commit"
+  make clean
+  SOURCE_DATE_EPOCH="$_source_date_epoch" make all \
+    CPPFLAGS='-D_FORTIFY_SOURCE=3' \
+    CXXFLAGS="$_baseline_cxxflags" \
+    LDFLAGS="$_baseline_ldflags"
+}
+
+check() {
+  cd "$_repo-$_commit"
+  SOURCE_DATE_EPOCH="$_source_date_epoch" make test
+}
+
+package() {
+  cd "$_repo-$_commit"
+  SOURCE_DATE_EPOCH="$_source_date_epoch" make DESTDIR="$pkgdir" PREFIX=/usr install
+}

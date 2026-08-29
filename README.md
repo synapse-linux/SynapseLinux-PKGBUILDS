@@ -42,6 +42,33 @@ make check-metadata
 `check-metadata` regenerates `.SRCINFO` into a temporary file and compares it
 with the committed metadata.
 
+## Clean x86-64 baseline build
+
+The host CachyOS toolchain is not a valid baseline build environment because its
+CRT advertises higher x86-64 ISA levels. Build twice in the pinned Arch snapshot
+container instead:
+
+```sh
+make build-baseline OUTPUT=/absolute/path/to/empty-output
+```
+
+The rootless Podman runner mounts this repository read-only, builds all six
+packages twice in separate ephemeral filesystems and requires byte-identical
+archives. It also gates MIT metadata, dependency closure, PIE/NX/RELRO/BIND_NOW,
+64 GUI catalogs, safe modes/links and final GNU ISA properties. Every executable
+must report baseline only; any v2, v3 or v4 `needed` or `used` property fails.
+
+The image can also be checked through an ephemeral Distrobox with an isolated
+home:
+
+```sh
+make distrobox-smoke OUTPUT=/tmp/synapse-distrobox-smoke.txt
+```
+
+Distrobox is for interactive diagnosis and image compatibility. The two
+isolated Podman runs remain authoritative because Distrobox deliberately
+integrates more host state.
+
 Package builds and release publication are separate gates. Built packages
 belong in `SynapseLinux-Pacman-Repository`, never in this repository. See
 [`STATUS.md`](STATUS.md) for current promotion blockers.

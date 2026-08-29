@@ -6,3 +6,5 @@
 *.tar.xz
 *.tar.zst
 *.log
+.work/
+out/

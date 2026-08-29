@@ -1,7 +1,7 @@
 # Maintainer: Mario Giustiniani <mariogiustiniani@gmail.com>
 pkgname=libsynapse-core
 pkgver=0.1.0.alpha1
-pkgrel=1
+pkgrel=2
 pkgdesc='Bounded C support library for Synapse first-party applications'
 arch=('x86_64')
 url='https://github.com/synapse-linux/libsynapse-core'
@@ -21,18 +21,22 @@ _baseline_ldflags='-Wl,-z,relro,-z,now'
 
 build() {
   cd "$_repo-$_commit"
+  local source_root="$srcdir/$_repo-$_commit"
+  local reproducible_flags="-ffile-prefix-map=$source_root=. -fdebug-prefix-map=$source_root=. -fmacro-prefix-map=$source_root=."
   make clean
   SOURCE_DATE_EPOCH="$_source_date_epoch" make all \
     CPPFLAGS='-D_FORTIFY_SOURCE=3' \
-    CFLAGS="$_baseline_cflags" \
+    CFLAGS="$_baseline_cflags $reproducible_flags" \
     LDFLAGS="$_baseline_ldflags"
 }
 
 check() {
   cd "$_repo-$_commit"
+  local source_root="$srcdir/$_repo-$_commit"
+  local reproducible_flags="-ffile-prefix-map=$source_root=. -fdebug-prefix-map=$source_root=. -fmacro-prefix-map=$source_root=."
   SOURCE_DATE_EPOCH="$_source_date_epoch" make test \
     CPPFLAGS='-D_FORTIFY_SOURCE=3' \
-    CFLAGS="$_baseline_cflags" \
+    CFLAGS="$_baseline_cflags $reproducible_flags" \
     LDFLAGS="$_baseline_ldflags"
 }
 

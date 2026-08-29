@@ -18,6 +18,11 @@
   upstream version requires a `pkgrel` increment.
 - Production promotion requires signed source identity, signed packages,
   content-addressed retention and a separate release receipt.
+- x86-64 baseline qualification uses the pinned rootless Podman image under
+  `containers/baseline-x86_64`. Both clean runs must be byte-reproducible, and
+  final ELF `x86 ISA needed`/`used` notes must not contain v2, v3 or v4.
+- Distrobox is an optional interactive/smoke wrapper around that image; its host
+  integration is not a substitute for the isolated Podman qualification runs.
 - This packaging repository uses a single `main` branch. Standard Git Flow is
   reserved for the individual project source repositories.
 - Generated scripts, documentation and diagnostics are written in English.

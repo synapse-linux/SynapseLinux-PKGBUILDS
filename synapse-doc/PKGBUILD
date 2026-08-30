@@ -1,6 +1,6 @@
 # Maintainer: Mario Giustiniani <mariogiustiniani@gmail.com>
 pkgname=synapse-doc
-pkgver=0.1.0.alpha2
+pkgver=0.1.0.alpha3
 pkgrel=1
 pkgdesc='Bounded console-first Markdown semantic parser and viewer'
 arch=('x86_64')
@@ -12,10 +12,10 @@ checkdepends=('python' 'nodejs' 'util-linux' 'desktop-file-utils')
 optdepends=('foot: graphical terminal launch')
 options=('!lto' '!debug')
 _repo=synapse-doc
-_commit=87d27dc48f379c63158c17dabf0f844200a5923c
+_commit=16ada585fd8a92d66e2f55dde45dd0b49eaad767
 _source_date_epoch=1788035241
 source=("$pkgname-$_commit.tar.gz::https://codeload.github.com/synapse-linux/$_repo/tar.gz/$_commit")
-sha256sums=('4628b70ad09ca770b8cce30f26481479018c21356114098c2c7e5d2ac3069a9c')
+sha256sums=('9aeb0226fb6fa8fbd02200e2ccda6e3c71e768df2bea41877a26e47e68f25597')
 
 _baseline_cflags='-O2 -g -std=c17 -Wall -Wextra -Wpedantic -Werror -fstack-protector-strong -fPIE -march=x86-64 -mtune=generic'
 _baseline_ldflags='-Wl,-z,relro,-z,now -pie'

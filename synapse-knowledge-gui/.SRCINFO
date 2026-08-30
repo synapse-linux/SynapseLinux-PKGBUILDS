@@ -1,6 +1,6 @@
 pkgbase = synapse-knowledge-gui
 	pkgdesc = Standalone Qt 6 client for Synapse Knowledge providers
-	pkgver = 0.1.0.alpha5
+	pkgver = 0.1.0.alpha6
 	pkgrel = 1
 	url = https://github.com/synapse-linux/synapse-knowledge-gui
 	arch = x86_64
@@ -20,7 +20,7 @@ pkgbase = synapse-knowledge-gui
 	depends = synapse-chart
 	options = !lto
 	options = !debug
-	source = synapse-knowledge-gui-59985baef8b8df6477407f2572e6e152def20629.tar.gz::https://codeload.github.com/synapse-linux/synapse-knowledge-gui/tar.gz/59985baef8b8df6477407f2572e6e152def20629
-	sha256sums = 2d3279b8be79ed1d398bb65df8b8ac8af2582cbddcca88e59fb7d4c7348f8aa4
+	source = synapse-knowledge-gui-a653be22a7a23defe9d76f67317f90304402cc31.tar.gz::https://codeload.github.com/synapse-linux/synapse-knowledge-gui/tar.gz/a653be22a7a23defe9d76f67317f90304402cc31
+	sha256sums = d75e9b258e0217596c3a28581766ba0cd3571f9043cfe530827be0754769185d
 
 pkgname = synapse-knowledge-gui

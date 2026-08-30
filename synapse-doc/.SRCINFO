@@ -1,6 +1,6 @@
 pkgbase = synapse-doc
 	pkgdesc = Bounded console-first Markdown semantic parser and viewer
-	pkgver = 0.1.0.alpha2
+	pkgver = 0.1.0.alpha3
 	pkgrel = 1
 	url = https://github.com/synapse-linux/synapse-doc
 	arch = x86_64
@@ -20,7 +20,7 @@ pkgbase = synapse-doc
 	optdepends = foot: graphical terminal launch
 	options = !lto
 	options = !debug
-	source = synapse-doc-87d27dc48f379c63158c17dabf0f844200a5923c.tar.gz::https://codeload.github.com/synapse-linux/synapse-doc/tar.gz/87d27dc48f379c63158c17dabf0f844200a5923c
-	sha256sums = 4628b70ad09ca770b8cce30f26481479018c21356114098c2c7e5d2ac3069a9c
+	source = synapse-doc-16ada585fd8a92d66e2f55dde45dd0b49eaad767.tar.gz::https://codeload.github.com/synapse-linux/synapse-doc/tar.gz/16ada585fd8a92d66e2f55dde45dd0b49eaad767
+	sha256sums = 9aeb0226fb6fa8fbd02200e2ccda6e3c71e768df2bea41877a26e47e68f25597
 
 pkgname = synapse-doc

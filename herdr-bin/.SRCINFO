@@ -1,0 +1,19 @@
+pkgbase = herdr-bin
+	pkgdesc = Terminal workspace manager for AI coding agents (prebuilt binary release)
+	pkgver = 0.8.2
+	pkgrel = 1
+	url = https://github.com/herdrdev/herdr
+	arch = x86_64
+	license = Apache-2.0
+	provides = herdr=0.8.2
+	conflicts = herdr
+	source = herdr-linux-x86_64::https://github.com/herdrdev/herdr/releases/download/v0.8.2/herdr-linux-x86_64
+	source = LICENSE::https://raw.githubusercontent.com/herdrdev/herdr/v0.8.2/LICENSE
+	source = README.md::https://raw.githubusercontent.com/herdrdev/herdr/v0.8.2/README.md
+	source = CHANGELOG.md::https://raw.githubusercontent.com/herdrdev/herdr/v0.8.2/CHANGELOG.md
+	sha256sums = 976150a14d490c94b243ea2e1a7eb2dfb67f12e36b182db90936f6728e6aecf4
+	sha256sums = c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4
+	sha256sums = a6aec1979a5259ce2e4e85fb6102a9bbff0e145bacadb6c563ef242496c96dbf
+	sha256sums = cfe967450a3830587f2ca679b35e9aa3882e0f78054e2a8e92dc70a7193472c5
+
+pkgname = herdr-bin

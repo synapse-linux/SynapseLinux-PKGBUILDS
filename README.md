@@ -31,6 +31,19 @@ These six first-party projects are licensed under MIT on their current
 `develop` commits. Future recipes for external projects must retain their actual
 upstream licenses rather than inheriting the Synapse default.
 
+## Third-party packages
+
+`herdr-bin` is the adopted terminal workspace manager replacing the deprecated
+`synapse-harness`. It is a prebuilt binary release (tag `v0.8.2`, Apache-2.0,
+`herdrdev/herdr`), SHA-256 pinned, statically linked and x86-64-baseline only.
+Its PKGBUILD is authoritative even though there is no source build; the
+`pkgbuilds_commit` binds the recipe that declares the upstream source URL,
+archive SHA-256, license and install layout.
+
+`herdr/` is the source-build alternative of the same project; it requires a
+custom `zig` 0.15.2 toolchain (absent from the standard repos) and is not the
+adopted package.
+
 ## Validation
 
 ```sh

@@ -1,0 +1,18 @@
+pkgbase = herdr
+	pkgdesc = Terminal workspace manager for AI coding agents
+	pkgver = 0.8.2
+	pkgrel = 1
+	url = https://github.com/herdrdev/herdr
+	arch = x86_64
+	license = Apache-2.0
+	makedepends = rust
+	makedepends = zig>=0.15.2
+	makedepends = zig<0.16.0
+	makedepends = base-devel
+	depends = glibc
+	options = !lto
+	options = !debug
+	source = herdr-0.8.2.tar.gz::https://codeload.github.com/herdrdev/herdr/tar.gz/v0.8.2
+	sha256sums = 60453051025ee44ebf055d26cdaf665a0accd99a992cddd22c166a26c49cd161
+
+pkgname = herdr

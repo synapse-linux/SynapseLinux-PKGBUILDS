@@ -1,0 +1,40 @@
+# Maintainer: Mario Giustiniani <mariogiustiniani@gmail.com>
+pkgname=herdr
+pkgver=0.8.2
+pkgrel=1
+pkgdesc='Terminal workspace manager for AI coding agents'
+arch=('x86_64')
+url='https://github.com/herdrdev/herdr'
+license=('Apache-2.0')
+depends=('glibc')
+# The vendored libghostty-vt build.zig requires Zig 0.15.2 exactly; 0.16.0
+# fails with a readFileAlloc API mismatch. 0.15.2 is absent from the standard
+# CachyOS/extra repos (they ship zig 0.16.0), so a custom zig 0.15.2 binary
+# must be provided at build time (e.g. downloaded to PATH).
+makedepends=('rust' 'zig>=0.15.2' 'zig<0.16.0' 'base-devel')
+options=('!lto' '!debug')
+_repo=herdr
+_tag=v0.8.2
+source=("$pkgname-$pkgver.tar.gz::https://codeload.github.com/herdrdev/$_repo/tar.gz/$_tag")
+sha256sums=('60453051025ee44ebf055d26cdaf665a0accd99a992cddd22c166a26c49cd161')
+
+build() {
+  cd "$_repo-$pkgver"
+  # herdr vendors a Zig-built libghostty-vt (VT rendering) and a patched
+  # portable-pty crate; both are compiled into the single Rust binary.
+  export LIBGHOSTTY_VT_OPTIMIZE=ReleaseFast
+  cargo build --release --locked
+}
+
+check() {
+  cd "$_repo-$pkgver"
+  cargo test --release --locked
+}
+
+package() {
+  cd "$_repo-$pkgver"
+  install -D -m 0755 target/release/herdr "$pkgdir/usr/bin/herdr"
+  install -D -m 0644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -D -m 0644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+  install -D -m 0644 CHANGELOG.md "$pkgdir/usr/share/doc/$pkgname/CHANGELOG.md"
+}

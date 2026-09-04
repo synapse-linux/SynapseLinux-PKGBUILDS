@@ -1,0 +1,17 @@
+pkgbase = synapse-monitor
+	pkgdesc = Bounded read-only system monitor with JSON contracts and native TUI
+	pkgver = 0.4.0.alpha4
+	pkgrel = 1
+	url = https://github.com/synapse-linux/synapse-monitor
+	arch = x86_64
+	license = MIT
+	checkdepends = python
+	makedepends = gcc
+	makedepends = make
+	depends = glibc
+	options = !lto
+	options = !debug
+	source = synapse-monitor-2f6f7ee339562c87da1834621f3b969edbc2eba8.tar.gz::https://codeload.github.com/synapse-linux/synapse-monitor/tar.gz/2f6f7ee339562c87da1834621f3b969edbc2eba8
+	sha256sums = 99d68bb55fb4b1c8250a8e27727d1c8e1acc40b940b3551951ce35b2718ab20f
+
+pkgname = synapse-monitor

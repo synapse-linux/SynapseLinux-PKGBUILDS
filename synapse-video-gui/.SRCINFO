@@ -1,0 +1,24 @@
+pkgbase = synapse-video-gui
+	pkgdesc = Qt 6 GUI projection for Synapse Video workflows
+	pkgver = 0.1.0.dev6
+	pkgrel = 1
+	url = https://github.com/synapse-linux/synapse-video-gui
+	arch = x86_64
+	license = MIT
+	checkdepends = python
+	makedepends = gcc
+	makedepends = make
+	makedepends = pkgconf
+	makedepends = python
+	makedepends = qt6-tools
+	depends = glibc
+	depends = gcc-libs
+	depends = qt6-base
+	depends = qt6-multimedia
+	depends = synapse-video
+	options = !lto
+	options = !debug
+	source = synapse-video-gui-8d127362bfe6cfee396e7e8c9c7a67f0b3cad1ed.tar.gz::https://codeload.github.com/synapse-linux/synapse-video-gui/tar.gz/8d127362bfe6cfee396e7e8c9c7a67f0b3cad1ed
+	sha256sums = bbd352a5314bd69b8c07f6b9022db65e4fcde1f1ee8282aafb46c5a75773472f
+
+pkgname = synapse-video-gui

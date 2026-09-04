@@ -1,0 +1,44 @@
+# Maintainer: Mario Giustiniani <mariogiustiniani@gmail.com>
+pkgname=synapse-video-gui
+pkgver=0.1.0.dev6
+pkgrel=1
+pkgdesc='Qt 6 GUI projection for Synapse Video workflows'
+arch=('x86_64')
+url='https://github.com/synapse-linux/synapse-video-gui'
+license=('MIT')
+depends=('glibc' 'gcc-libs' 'qt6-base' 'qt6-multimedia' 'synapse-video')
+makedepends=('gcc' 'make' 'pkgconf' 'python' 'qt6-tools')
+checkdepends=('python')
+options=('!lto' '!debug')
+_repo=synapse-video-gui
+_commit=8d127362bfe6cfee396e7e8c9c7a67f0b3cad1ed
+_source_date_epoch=1788035241
+source=("$pkgname-$_commit.tar.gz::https://codeload.github.com/synapse-linux/$_repo/tar.gz/$_commit")
+sha256sums=('bbd352a5314bd69b8c07f6b9022db65e4fcde1f1ee8282aafb46c5a75773472f')
+
+_baseline_cxxflags='-O2 -g -std=c++17 -Wall -Wextra -Wpedantic -Werror -fstack-protector-strong -fPIC -march=x86-64 -mtune=generic'
+_baseline_ldflags='-Wl,-z,relro,-z,now -pie'
+
+build() {
+  cd "$_repo-$_commit"
+  make clean
+  SOURCE_DATE_EPOCH="$_source_date_epoch" make all \
+    CPPFLAGS='-D_FORTIFY_SOURCE=3' \
+    CXXFLAGS="$_baseline_cxxflags" \
+    LDFLAGS="$_baseline_ldflags"
+}
+
+check() {
+  cd "$_repo-$_commit"
+  SOURCE_DATE_EPOCH="$_source_date_epoch" FACADE=/usr/bin/synapse-video make test \
+    CXXFLAGS="$_baseline_cxxflags" \
+    LDFLAGS="$_baseline_ldflags"
+}
+
+package() {
+  cd "$_repo-$_commit"
+  install -D -m 0755 build/synapse-video-gui "$pkgdir/usr/bin/synapse-video-gui"
+  install -D -m 0644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -D -m 0644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+  install -D -m 0644 CHANGELOG.md "$pkgdir/usr/share/doc/$pkgname/CHANGELOG.md"
+}

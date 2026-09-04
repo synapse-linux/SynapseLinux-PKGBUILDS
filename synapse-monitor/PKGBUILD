@@ -1,0 +1,42 @@
+# Maintainer: Mario Giustiniani <mariogiustiniani@gmail.com>
+pkgname=synapse-monitor
+pkgver=0.4.0.alpha4
+pkgrel=1
+pkgdesc='Bounded read-only system monitor with JSON contracts and native TUI'
+arch=('x86_64')
+url='https://github.com/synapse-linux/synapse-monitor'
+license=('MIT')
+depends=('glibc')
+makedepends=('gcc' 'make')
+checkdepends=('python')
+options=('!lto' '!debug')
+_repo=synapse-monitor
+_commit=2f6f7ee339562c87da1834621f3b969edbc2eba8
+_source_date_epoch=1788035241
+source=("$pkgname-$_commit.tar.gz::https://codeload.github.com/synapse-linux/$_repo/tar.gz/$_commit")
+sha256sums=('99d68bb55fb4b1c8250a8e27727d1c8e1acc40b940b3551951ce35b2718ab20f')
+
+_baseline_cflags='-O2 -g -std=c17 -Wall -Wextra -Wpedantic -Werror -fstack-protector-strong -fPIE -march=x86-64 -mtune=generic'
+_baseline_ldflags='-Wl,-z,relro,-z,now -pie'
+
+build() {
+  cd "$_repo-$_commit"
+  make clean
+  SOURCE_DATE_EPOCH="$_source_date_epoch" make all \
+    CPPFLAGS='-D_FORTIFY_SOURCE=3' \
+    CFLAGS="$_baseline_cflags" \
+    LDFLAGS="$_baseline_ldflags"
+}
+
+check() {
+  cd "$_repo-$_commit"
+  SOURCE_DATE_EPOCH="$_source_date_epoch" make test \
+    CPPFLAGS='-D_FORTIFY_SOURCE=3' \
+    CFLAGS="$_baseline_cflags" \
+    LDFLAGS="$_baseline_ldflags"
+}
+
+package() {
+  cd "$_repo-$_commit"
+  SOURCE_DATE_EPOCH="$_source_date_epoch" make DESTDIR="$pkgdir" PREFIX=/usr install
+}

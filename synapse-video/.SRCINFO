@@ -1,0 +1,18 @@
+pkgbase = synapse-video
+	pkgdesc = Provider-neutral CLI and contracts for canonical video projects and deterministic Silence Cut workflows
+	pkgver = 0.1.0.dev7
+	pkgrel = 1
+	url = https://github.com/synapse-linux/synapse-video
+	arch = x86_64
+	license = MIT
+	checkdepends = python
+	makedepends = python
+	makedepends = python-setuptools
+	depends = python
+	depends = ffmpeg
+	options = !lto
+	options = !debug
+	source = synapse-video-6e8d83a5d00a774f4a4cc4db1e54923b2829e36d.tar.gz::https://codeload.github.com/synapse-linux/synapse-video/tar.gz/6e8d83a5d00a774f4a4cc4db1e54923b2829e36d
+	sha256sums = 0c6f42489508e1660af2f7e7fad6ba3d0bddc7ff8108d61784336faa0b80c76d
+
+pkgname = synapse-video

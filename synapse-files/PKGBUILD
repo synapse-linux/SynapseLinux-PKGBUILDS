@@ -1,0 +1,50 @@
+# Maintainer: Mario Giustiniani <mariogiustiniani@gmail.com>
+pkgname=synapse-files
+pkgver=0.1.0.alpha2
+pkgrel=1
+pkgdesc='Bounded file manager CLI with Qt 6 GUI and archive support'
+arch=('x86_64')
+url='https://github.com/synapse-linux/synapse-files'
+license=('GPL-3.0-or-later')
+depends=('glibc' 'gcc-libs' 'libsynapse-core' 'ncursesw' 'libarchive' 'qt6-base' 'qt6-declarative' 'qt6-quickcontrols2')
+makedepends=('gcc' 'make' 'pkgconf' 'qt6-tools' 'python')
+checkdepends=('python')
+options=('!lto' '!debug')
+_repo=synapse-files
+_commit=3cc897a37880e77cb9e8e8e1463bf966af403567
+_source_date_epoch=1788035241
+source=("$pkgname-$_commit.tar.gz::https://codeload.github.com/synapse-linux/$_repo/tar.gz/$_commit")
+sha256sums=('7ca3ce7842532cda456dfbae88578f3b3840eb31a269773e1841a6da6540b43f')
+
+_baseline_cflags='-O2 -g -std=c11 -Wall -Wextra -Wpedantic -Werror -fstack-protector-strong -fPIE -march=x86-64 -mtune=generic'
+_baseline_cxxflags='-O2 -g -std=c++17 -Wall -Wextra -Wpedantic -Werror -fstack-protector-strong -fPIC -march=x86-64 -mtune=generic'
+_baseline_ldflags='-Wl,-z,relro,-z,now -pie'
+
+_core_args() {
+  CORE_ARGS=()
+  [[ -z ${SYNAPSE_CORE_ROOT:-} ]] || CORE_ARGS+=(CORE_ROOT="$SYNAPSE_CORE_ROOT")
+}
+
+build() {
+  cd "$_repo-$_commit"
+  _core_args
+  make clean "${CORE_ARGS[@]}" BUILD_GUI=1
+  SOURCE_DATE_EPOCH="$_source_date_epoch" make all "${CORE_ARGS[@]}" BUILD_GUI=1 \
+    CPPFLAGS='-D_FORTIFY_SOURCE=3' \
+    CFLAGS="$_baseline_cflags" \
+    CXXFLAGS="$_baseline_cxxflags" \
+    LDFLAGS="$_baseline_ldflags"
+}
+
+check() {
+  cd "$_repo-$_commit"
+  _core_args
+  SOURCE_DATE_EPOCH="$_source_date_epoch" make test "${CORE_ARGS[@]}" BUILD_GUI=1
+}
+
+package() {
+  cd "$_repo-$_commit"
+  _core_args
+  SOURCE_DATE_EPOCH="$_source_date_epoch" make DESTDIR="$pkgdir" PREFIX=/usr install "${CORE_ARGS[@]}" BUILD_GUI=1
+  install -D -m 0644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

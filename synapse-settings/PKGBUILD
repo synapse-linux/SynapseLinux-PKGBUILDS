@@ -1,0 +1,50 @@
+# Maintainer: Mario Giustiniani <mariogiustiniani@gmail.com>
+pkgname=synapse-settings
+pkgver=0.1.0.alpha1
+pkgrel=1
+pkgdesc='Composition and layer settings provider for Synapse system images'
+arch=('x86_64')
+url='https://github.com/synapse-linux/synapse-settings'
+license=('GPL-3.0-or-later')
+depends=('glibc' 'libsynapse-core')
+makedepends=('gcc' 'make' 'pkgconf')
+checkdepends=('python')
+options=('!lto' '!debug')
+_repo=synapse-settings
+_commit=c7d33456a89285ddbcf83fe8330b292d7d4e2ee7
+_source_date_epoch=1788035241
+source=("$pkgname-$_commit.tar.gz::https://codeload.github.com/synapse-linux/$_repo/tar.gz/$_commit")
+sha256sums=('e4ff2b55351887de6fd7c90d3924fb9e93ec6571e48344ee30ba1b9337811dcf')
+
+_baseline_cflags='-O2 -g -std=c11 -Wall -Wextra -Wpedantic -Werror -fstack-protector-strong -fPIE -march=x86-64 -mtune=generic'
+_baseline_ldflags='-Wl,-z,relro,-z,now -pie'
+
+_core_args() {
+  CORE_ARGS=()
+  [[ -z ${SYNAPSE_CORE_ROOT:-} ]] || CORE_ARGS+=(CORE_ROOT="$SYNAPSE_CORE_ROOT")
+}
+
+build() {
+  cd "$_repo-$_commit"
+  _core_args
+  make clean "${CORE_ARGS[@]}"
+  SOURCE_DATE_EPOCH="$_source_date_epoch" make all "${CORE_ARGS[@]}" \
+    CPPFLAGS='-D_FORTIFY_SOURCE=3' \
+    CFLAGS="$_baseline_cflags" \
+    LDFLAGS="$_baseline_ldflags"
+}
+
+check() {
+  cd "$_repo-$_commit"
+  _core_args
+  SOURCE_DATE_EPOCH="$_source_date_epoch" make test "${CORE_ARGS[@]}"
+}
+
+package() {
+  cd "$_repo-$_commit"
+  _core_args
+  make DESTDIR="$pkgdir" PREFIX=/usr install "${CORE_ARGS[@]}"
+  install -D -m 0644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -D -m 0644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+  install -D -m 0644 CHANGELOG.md "$pkgdir/usr/share/doc/$pkgname/CHANGELOG.md"
+}

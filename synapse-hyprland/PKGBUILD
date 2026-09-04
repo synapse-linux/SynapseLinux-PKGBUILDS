@@ -1,0 +1,109 @@
+# Maintainer: Mario Giustiniani <mariogiustiniani@gmail.com>
+pkgname=synapse-hyprland
+pkgver=0.56.2.synapse1
+pkgrel=1
+pkgdesc='Synapse-maintained Hyprland with bounded monitor render resources'
+arch=('x86_64')
+url='https://github.com/synapse-linux/synapse-hyprland'
+_upstreamver=0.56.2
+_synapsecommit=f8504d06631de232571eb5859ac72bb860bd6b73
+license=('BSD-3-Clause')
+provides=("hyprland=$_upstreamver" wayland-compositor)
+conflicts=(hyprland)
+depends=(cairo
+         aquamarine
+         libgcc
+         'libstdc++'
+         glibc
+         glib2
+         glslang
+         hyprcursor
+         hyprgraphics
+         hyprland-guiutils
+         hyprlang
+         hyprutils
+         hyprwayland-scanner
+         hyprwire
+         lcms2
+         libdrm
+         libglvnd
+         libinput
+         libx11
+         libxcb
+         libxcomposite
+         libxcursor
+         libxfixes
+         libxkbcommon
+         libxrender
+         lua
+         mesa
+         muparser
+         opengl-driver
+         pango
+         pixman
+         re2
+         tomlplusplus
+         util-linux-libs
+         wayland
+         wayland-protocols
+         xcb-proto
+         xcb-util
+         xcb-util-errors
+         xcb-util-image
+         xcb-util-keysyms
+         xcb-util-renderutil
+         xcb-util-wm
+         xorg-xwayland)
+makedepends=(cmake
+             glaze
+             hyprland-protocols
+             meson
+             ninja
+             xorgproto)
+optdepends=('cmake: to build and install plugins using hyprpm'
+            'cpio: to build and install plugins using hyprpm'
+            'glaze: to build and install plugins using hyprpm'
+            'hyprland-protocols: to build and install plugins using hyprpm'
+            'hyprshutdown: clean logout and shutdown helper'
+            'meson: to build and install plugins using hyprpm'
+            'uwsm: an advanced way to start desktop compositors as systemd units'
+            'xdg-desktop-portal-hyprland: xdg-desktop-portal backend for hyprland')
+options=('!lto' '!debug')
+_repo=synapse-hyprland
+_commit=f8504d06631de232571eb5859ac72bb860bd6b73
+_source_date_epoch=1788035241
+source=("$pkgname-$_commit.tar.gz::https://codeload.github.com/synapse-linux/$_repo/tar.gz/$_commit")
+sha256sums=('a5c722a17519cbc017028cb8dc6e89b6475059a6db1f8f1ca34a2ff61c9d6251')
+
+prepare() {
+  cd "$_repo-$_commit"
+  sed -i \
+    -e "s|^#define GIT_COMMIT_HASH.*|#define GIT_COMMIT_HASH    \"$_synapsecommit\"|" \
+    -e 's|^#define GIT_BRANCH.*|#define GIT_BRANCH         "feature/synapse-lazy-monitor-resources"|' \
+    -e 's|^#define GIT_COMMIT_MESSAGE.*|#define GIT_COMMIT_MESSAGE "render: handle absent lazy blur framebuffer"|' \
+    -e 's|^#define GIT_COMMIT_DATE.*|#define GIT_COMMIT_DATE    "Thu Aug 27 17:37:39 2026 UTC"|' \
+    -e 's|^#define GIT_DIRTY.*|#define GIT_DIRTY          "clean"|' \
+    -e 's|^#define GIT_TAG.*|#define GIT_TAG            "v0.56.2-synapse.1"|' \
+    -e 's|^#define GIT_COMMITS.*|#define GIT_COMMITS        "7663"|' \
+    src/version.h.in
+  sed -i -e '/^release:/{n;s/-D/-DCMAKE_SKIP_RPATH=ON -D/}' Makefile
+}
+
+build() {
+  cd "$_repo-$_commit"
+  export GIT_COMMIT_HASH="$_synapsecommit"
+  export GIT_BRANCH=feature/synapse-lazy-monitor-resources
+  export GIT_COMMIT_MESSAGE='render: handle absent lazy blur framebuffer'
+  export GIT_COMMIT_DATE='Thu Aug 27 17:37:39 2026 UTC'
+  export GIT_DIRTY=clean
+  export GIT_TAG=v0.56.2-synapse.1
+  export GIT_COMMITS=7663
+  SOURCE_DATE_EPOCH="$_source_date_epoch" make release PREFIX=/usr
+}
+
+package() {
+  cd "$_repo-$_commit"
+  SOURCE_DATE_EPOCH="$_source_date_epoch" make DESTDIR="$pkgdir" install
+  rm -fv "$pkgdir/usr/include/hyprland/src/version.h.in"
+  install -Dm0644 -t "$pkgdir/usr/share/licenses/$pkgname/" LICENSE
+}

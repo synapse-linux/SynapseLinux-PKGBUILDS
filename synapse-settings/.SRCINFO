@@ -1,0 +1,19 @@
+pkgbase = synapse-settings
+	pkgdesc = Composition and layer settings provider for Synapse system images
+	pkgver = 0.1.0.alpha1
+	pkgrel = 1
+	url = https://github.com/synapse-linux/synapse-settings
+	arch = x86_64
+	license = GPL-3.0-or-later
+	checkdepends = python
+	makedepends = gcc
+	makedepends = make
+	makedepends = pkgconf
+	depends = glibc
+	depends = libsynapse-core
+	options = !lto
+	options = !debug
+	source = synapse-settings-c7d33456a89285ddbcf83fe8330b292d7d4e2ee7.tar.gz::https://codeload.github.com/synapse-linux/synapse-settings/tar.gz/c7d33456a89285ddbcf83fe8330b292d7d4e2ee7
+	sha256sums = e4ff2b55351887de6fd7c90d3924fb9e93ec6571e48344ee30ba1b9337811dcf
+
+pkgname = synapse-settings

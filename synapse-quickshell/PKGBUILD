@@ -1,0 +1,72 @@
+# Maintainer: Mario Giustiniani <mariogiustiniani@gmail.com>
+pkgname=synapse-quickshell
+pkgver=0.3.1.synapse1
+pkgrel=1
+pkgdesc='Quickshell with process-scoped THP and software scene-graph policies'
+arch=('x86_64')
+url='https://github.com/synapse-linux/synapse-quickshell'
+license=('LGPL-3.0-only')
+provides=('quickshell=0.3.1')
+conflicts=(quickshell)
+depends=(cpptrace
+         glibc
+         hicolor-icon-theme
+         jemalloc
+         libdrm
+         libgcc
+         libglvnd
+         libpipewire
+         libstdc++
+         libxcb
+         mesa
+         pam
+         polkit
+         qt6-base
+         qt6-declarative
+         qt6-svg
+         qt6-wayland
+         wayland)
+makedepends=(cli11
+             cmake
+             ninja
+             qt6-shadertools
+             spirv-tools
+             vulkan-headers
+             wayland-protocols)
+options=('!lto' '!debug')
+_repo=synapse-quickshell
+_commit=0a3ff09ccda6ae4d4c50ecacea8df000f6bddf0c
+_source_date_epoch=1788035241
+source=("$pkgname-$_commit.tar.gz::https://codeload.github.com/synapse-linux/$_repo/tar.gz/$_commit")
+sha256sums=('e070a793e89111f458867ca8f43c1f550a3c8d1c0354d2b9a89481305b2ef032')
+
+build() {
+  cd "$_repo-$_commit"
+  # GNU ld's generated build-id was the sole nondeterministic byte range in
+  # otherwise identical builds. No separate debug package is produced here.
+  export LDFLAGS="${LDFLAGS} -Wl,--build-id=none"
+  local cmake_options=(
+    -D CMAKE_BUILD_TYPE=RelWithDebInfo
+    -D DISTRIBUTOR='Synapse Linux'
+    -D CRASH_HANDLER=ON
+    -D SYNAPSE_DISABLE_PROCESS_THP=ON
+    -D SYNAPSE_SOFTWARE_SCENEGRAPH=ON
+    -D CMAKE_EXE_LINKER_FLAGS='-Wl,-z,relro,-z,now,--build-id=0x49fdbe430fe543093316a7d663c349ab6c27182a'
+    -D CMAKE_INSTALL_PREFIX=/usr
+    -D INSTALL_QML_PREFIX=lib/qt6/qml
+  )
+  cmake -G Ninja -B build -W no-dev "${cmake_options[@]}"
+  cmake --build build
+}
+
+check() {
+  cd "$_repo-$_commit"
+  SYNAPSE_TEST_BUILD_ROOT="$srcdir/synapse-launcher-test" \
+    ./synapse-tests/test-thp-launcher.sh
+}
+
+package() {
+  cd "$_repo-$_commit"
+  DESTDIR="$pkgdir" cmake --install build
+  install -Dm0644 -t "$pkgdir/usr/share/licenses/$pkgname/" LICENSE
+}

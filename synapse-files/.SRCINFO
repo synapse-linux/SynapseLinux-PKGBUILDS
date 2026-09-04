@@ -1,0 +1,27 @@
+pkgbase = synapse-files
+	pkgdesc = Bounded file manager CLI with Qt 6 GUI and archive support
+	pkgver = 0.1.0.alpha2
+	pkgrel = 1
+	url = https://github.com/synapse-linux/synapse-files
+	arch = x86_64
+	license = GPL-3.0-or-later
+	checkdepends = python
+	makedepends = gcc
+	makedepends = make
+	makedepends = pkgconf
+	makedepends = qt6-tools
+	makedepends = python
+	depends = glibc
+	depends = gcc-libs
+	depends = libsynapse-core
+	depends = ncursesw
+	depends = libarchive
+	depends = qt6-base
+	depends = qt6-declarative
+	depends = qt6-quickcontrols2
+	options = !lto
+	options = !debug
+	source = synapse-files-3cc897a37880e77cb9e8e8e1463bf966af403567.tar.gz::https://codeload.github.com/synapse-linux/synapse-files/tar.gz/3cc897a37880e77cb9e8e8e1463bf966af403567
+	sha256sums = 7ca3ce7842532cda456dfbae88578f3b3840eb31a269773e1841a6da6540b43f
+
+pkgname = synapse-files

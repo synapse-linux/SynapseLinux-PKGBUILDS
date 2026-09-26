@@ -1,0 +1,41 @@
+# SPDX-License-Identifier: MIT
+# Maintainer: Mario Giustiniani <mariogiustiniani@gmail.com>
+# Immutable public source; package admission/signing remain separate gates.
+pkgname=synapse-surface
+pkgver=0.1.0.alpha6
+pkgrel=2
+pkgdesc='C17 replaceable desktop drawer and layer-shell host'
+arch=('x86_64')
+url='https://github.com/synapse-linux/synapse-surface'
+license=('MIT')
+depends=('glibc' 'libsynapse-core' 'json-c' 'glib2' 'gtk3' 'vte3' 'gtk-layer-shell')
+makedepends=('gcc' 'make' 'pkgconf')
+checkdepends=('python' 'bash')
+optdepends=('herdr-bin: selected replaceable terminal provider' 'synapse-workspaces: workspace overview delegation' 'synapse-hyprland: native layer-shell presentation')
+options=('!lto' '!debug')
+_commit=a2822823b1c2153b36f9326fc8bbadcfe10a1a0c
+source=("$pkgname-$_commit.tar.gz::https://codeload.github.com/synapse-linux/$pkgname/tar.gz/$_commit")
+sha256sums=('eda8c51fa9e4bd8c5ea2674799b9a324358ae271a026f7be397be5c9aead50e9')
+
+_args() {
+  CORE_ARGS=()
+  [[ -z ${SYNAPSE_CORE_ROOT:-} ]] || CORE_ARGS+=(CORE_ROOT="$SYNAPSE_CORE_ROOT")
+  BUILD_CFLAGS="-O2 -g -std=c17 -Wall -Wextra -Wpedantic -Werror -Wformat=2 -Wshadow -Wstrict-prototypes -fstack-protector-strong -fPIE -march=x86-64 -mtune=generic -ffile-prefix-map=$srcdir=src -fdebug-prefix-map=$srcdir=src -fmacro-prefix-map=$srcdir=src"
+  BUILD_LDFLAGS='-Wl,--as-needed,-z,relro,-z,now -pie'
+}
+build() {
+  cd "$pkgname-$_commit"
+  _args
+  make clean "${CORE_ARGS[@]}"
+  make all "${CORE_ARGS[@]}" CPPFLAGS='-D_FORTIFY_SOURCE=3' CFLAGS="$BUILD_CFLAGS" LDFLAGS="$BUILD_LDFLAGS"
+}
+check() {
+  cd "$pkgname-$_commit"
+  _args
+  make test "${CORE_ARGS[@]}" CPPFLAGS='-D_FORTIFY_SOURCE=3' CFLAGS="$BUILD_CFLAGS" LDFLAGS="$BUILD_LDFLAGS"
+}
+package() {
+  cd "$pkgname-$_commit"
+  _args
+  make DESTDIR="$pkgdir" PREFIX=/usr install "${CORE_ARGS[@]}"
+}

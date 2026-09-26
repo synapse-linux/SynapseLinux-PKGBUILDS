@@ -1,0 +1,24 @@
+pkgbase = synapse-background
+	pkgdesc = Bounded C17 static wallpaper provider for Wayland
+	pkgver = 0.1.0.alpha2
+	pkgrel = 3
+	url = https://github.com/synapse-linux/synapse-background
+	arch = x86_64
+	license = MIT
+	license = HPND-sell-variant
+	checkdepends = python
+	checkdepends = bash
+	makedepends = gcc
+	makedepends = make
+	makedepends = pkgconf
+	depends = glibc
+	depends = libsynapse-core
+	depends = wayland
+	depends = glib2
+	depends = gdk-pixbuf2
+	options = !lto
+	options = !debug
+	source = synapse-background-e9c27cbaad521ae7fe24e8ed89ac77d4dfdb0887.tar.gz::https://codeload.github.com/synapse-linux/synapse-background/tar.gz/e9c27cbaad521ae7fe24e8ed89ac77d4dfdb0887
+	sha256sums = 74b15974ee1e6cbf7a9d09e4ed6c1a82b6bb3bc79b990428042bfb50ee0868c8
+
+pkgname = synapse-background

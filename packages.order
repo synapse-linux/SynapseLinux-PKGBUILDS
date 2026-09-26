@@ -1,4 +1,9 @@
+# SPDX-License-Identifier: MIT
 libsynapse-core
+synapse-background
+synapse-shortcuts
+synapse-workspaces
+synapse-surface
 synapse-doc
 synapse-chart
 synapse-editor

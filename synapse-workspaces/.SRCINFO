@@ -1,0 +1,23 @@
+pkgbase = synapse-workspaces
+	pkgdesc = C17 four-base workspace topology and guarded navigation
+	pkgver = 0.1.0.alpha7
+	pkgrel = 3
+	url = https://github.com/synapse-linux/synapse-workspaces
+	arch = x86_64
+	license = MIT
+	checkdepends = python
+	checkdepends = bash
+	makedepends = gcc
+	makedepends = make
+	makedepends = pkgconf
+	depends = glibc
+	depends = libsynapse-core
+	depends = json-c
+	optdepends = synapse-hyprland: live compositor projection and navigation
+	optdepends = synapse-quickshell: graphical workspace overview
+	options = !lto
+	options = !debug
+	source = synapse-workspaces-f7a2a49b7b97cfe48904b6306dacb147632d163d.tar.gz::https://codeload.github.com/synapse-linux/synapse-workspaces/tar.gz/f7a2a49b7b97cfe48904b6306dacb147632d163d
+	sha256sums = d97a5550a1542dcbdb678d67469dcc37a1170a835a0962d6f10dd772ae90f75b
+
+pkgname = synapse-workspaces

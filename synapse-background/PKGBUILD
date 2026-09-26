@@ -1,0 +1,41 @@
+# SPDX-License-Identifier: MIT
+# Maintainer: Mario Giustiniani <mariogiustiniani@gmail.com>
+# Immutable public source; package admission/signing remain separate gates.
+pkgname=synapse-background
+pkgver=0.1.0.alpha2
+pkgrel=3
+pkgdesc='Bounded C17 static wallpaper provider for Wayland'
+arch=('x86_64')
+url='https://github.com/synapse-linux/synapse-background'
+license=('MIT' 'HPND-sell-variant')
+depends=('glibc' 'libsynapse-core' 'wayland' 'glib2' 'gdk-pixbuf2')
+makedepends=('gcc' 'make' 'pkgconf')
+checkdepends=('python' 'bash')
+optdepends=()
+options=('!lto' '!debug')
+_commit=e9c27cbaad521ae7fe24e8ed89ac77d4dfdb0887
+source=("$pkgname-$_commit.tar.gz::https://codeload.github.com/synapse-linux/$pkgname/tar.gz/$_commit")
+sha256sums=('74b15974ee1e6cbf7a9d09e4ed6c1a82b6bb3bc79b990428042bfb50ee0868c8')
+
+_args() {
+  CORE_ARGS=()
+  [[ -z ${SYNAPSE_CORE_ROOT:-} ]] || CORE_ARGS+=(CORE_ROOT="$SYNAPSE_CORE_ROOT")
+  BUILD_CFLAGS="-O2 -g -std=c17 -Wall -Wextra -Wpedantic -Werror -Wformat=2 -Wshadow -Wstrict-prototypes -fstack-protector-strong -fPIE -march=x86-64 -mtune=generic -ffile-prefix-map=$srcdir=src -fdebug-prefix-map=$srcdir=src -fmacro-prefix-map=$srcdir=src"
+  BUILD_LDFLAGS='-Wl,--as-needed,-z,relro,-z,now -pie'
+}
+build() {
+  cd "$pkgname-$_commit"
+  _args
+  make clean "${CORE_ARGS[@]}"
+  make all "${CORE_ARGS[@]}" CPPFLAGS='-D_FORTIFY_SOURCE=3' CFLAGS="$BUILD_CFLAGS" LDFLAGS="$BUILD_LDFLAGS"
+}
+check() {
+  cd "$pkgname-$_commit"
+  _args
+  make test "${CORE_ARGS[@]}" CPPFLAGS='-D_FORTIFY_SOURCE=3' CFLAGS="$BUILD_CFLAGS" LDFLAGS="$BUILD_LDFLAGS"
+}
+package() {
+  cd "$pkgname-$_commit"
+  _args
+  make DESTDIR="$pkgdir" PREFIX=/usr install "${CORE_ARGS[@]}"
+}

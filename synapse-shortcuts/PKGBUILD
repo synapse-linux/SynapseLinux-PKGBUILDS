@@ -1,0 +1,41 @@
+# SPDX-License-Identifier: MIT
+# Maintainer: Mario Giustiniani <mariogiustiniani@gmail.com>
+# Immutable public source; package admission/signing remain separate gates.
+pkgname=synapse-shortcuts
+pkgver=0.2.0.alpha4
+pkgrel=4
+pkgdesc='C17 shortcut catalogue and opaque trusted-action dispatcher'
+arch=('x86_64')
+url='https://github.com/synapse-linux/synapse-shortcuts'
+license=('MIT')
+depends=('glibc' 'libsynapse-core')
+makedepends=('gcc' 'make' 'pkgconf')
+checkdepends=('python' 'bash')
+optdepends=('synapse-hyprland: compositor actions' 'synapse-quickshell: presentation actions' 'synapse-workspaces: topology actions' 'synapse-files: file manager action' 'foot: terminal actions' 'brightnessctl: backlight actions' 'wireplumber: audio actions' 'playerctl: media actions')
+options=('!lto' '!debug')
+_commit=65863aa948977c4dad4fe90a2924f1d6f6d96b34
+source=("$pkgname-$_commit.tar.gz::https://codeload.github.com/synapse-linux/$pkgname/tar.gz/$_commit")
+sha256sums=('658cda56a955a966bcc98e4ae9661ac6d7bb8514aa68cff554ad766c472f05b7')
+
+_args() {
+  CORE_ARGS=()
+  [[ -z ${SYNAPSE_CORE_ROOT:-} ]] || CORE_ARGS+=(CORE_ROOT="$SYNAPSE_CORE_ROOT")
+  BUILD_CFLAGS="-O2 -g -std=c17 -Wall -Wextra -Wpedantic -Werror -Wformat=2 -Wshadow -Wstrict-prototypes -fstack-protector-strong -fPIE -march=x86-64 -mtune=generic -ffile-prefix-map=$srcdir=src -fdebug-prefix-map=$srcdir=src -fmacro-prefix-map=$srcdir=src"
+  BUILD_LDFLAGS='-Wl,--as-needed,-z,relro,-z,now -pie'
+}
+build() {
+  cd "$pkgname-$_commit"
+  _args
+  make clean "${CORE_ARGS[@]}"
+  make all "${CORE_ARGS[@]}" CPPFLAGS='-D_FORTIFY_SOURCE=3' CFLAGS="$BUILD_CFLAGS" LDFLAGS="$BUILD_LDFLAGS"
+}
+check() {
+  cd "$pkgname-$_commit"
+  _args
+  make test "${CORE_ARGS[@]}" CPPFLAGS='-D_FORTIFY_SOURCE=3' CFLAGS="$BUILD_CFLAGS" LDFLAGS="$BUILD_LDFLAGS"
+}
+package() {
+  cd "$pkgname-$_commit"
+  _args
+  make DESTDIR="$pkgdir" PREFIX=/usr install "${CORE_ARGS[@]}"
+}

@@ -1,7 +1,7 @@
 pkgbase = libsynapse-core
 	pkgdesc = Bounded C support library for Synapse first-party applications
 	pkgver = 0.1.0.alpha1
-	pkgrel = 2
+	pkgrel = 4
 	url = https://github.com/synapse-linux/libsynapse-core
 	arch = x86_64
 	license = MIT

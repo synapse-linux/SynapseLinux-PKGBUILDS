@@ -1,0 +1,41 @@
+# SPDX-License-Identifier: MIT
+# Maintainer: Mario Giustiniani <mariogiustiniani@gmail.com>
+# Immutable public source; package admission/signing remain separate gates.
+pkgname=synapse-workspaces
+pkgver=0.1.0.alpha7
+pkgrel=3
+pkgdesc='C17 four-base workspace topology and guarded navigation'
+arch=('x86_64')
+url='https://github.com/synapse-linux/synapse-workspaces'
+license=('MIT')
+depends=('glibc' 'libsynapse-core' 'json-c')
+makedepends=('gcc' 'make' 'pkgconf')
+checkdepends=('python' 'bash')
+optdepends=('synapse-hyprland: live compositor projection and navigation' 'synapse-quickshell: graphical workspace overview')
+options=('!lto' '!debug')
+_commit=f7a2a49b7b97cfe48904b6306dacb147632d163d
+source=("$pkgname-$_commit.tar.gz::https://codeload.github.com/synapse-linux/$pkgname/tar.gz/$_commit")
+sha256sums=('d97a5550a1542dcbdb678d67469dcc37a1170a835a0962d6f10dd772ae90f75b')
+
+_args() {
+  CORE_ARGS=()
+  [[ -z ${SYNAPSE_CORE_ROOT:-} ]] || CORE_ARGS+=(CORE_ROOT="$SYNAPSE_CORE_ROOT")
+  BUILD_CFLAGS="-O2 -g -std=c17 -Wall -Wextra -Wpedantic -Werror -Wformat=2 -Wshadow -Wstrict-prototypes -fstack-protector-strong -fPIE -march=x86-64 -mtune=generic -ffile-prefix-map=$srcdir=src -fdebug-prefix-map=$srcdir=src -fmacro-prefix-map=$srcdir=src"
+  BUILD_LDFLAGS='-Wl,--as-needed,-z,relro,-z,now -pie'
+}
+build() {
+  cd "$pkgname-$_commit"
+  _args
+  make clean "${CORE_ARGS[@]}"
+  make all "${CORE_ARGS[@]}" CPPFLAGS='-D_FORTIFY_SOURCE=3' CFLAGS="$BUILD_CFLAGS" LDFLAGS="$BUILD_LDFLAGS"
+}
+check() {
+  cd "$pkgname-$_commit"
+  _args
+  make test "${CORE_ARGS[@]}" CPPFLAGS='-D_FORTIFY_SOURCE=3' CFLAGS="$BUILD_CFLAGS" LDFLAGS="$BUILD_LDFLAGS"
+}
+package() {
+  cd "$pkgname-$_commit"
+  _args
+  make DESTDIR="$pkgdir" PREFIX=/usr install "${CORE_ARGS[@]}"
+}

@@ -1,0 +1,15 @@
+{
+  "schema": "synapse.provider-sdk/v1",
+  "imageId": "b2f5750dbdb68dfd9b6d28bea5683084bf476e2c4f8d86deaf8e6bb90f5a6715",
+  "imageDigest": "sha256:a03a05295e19d6870813269ea89cfe45019b8491ae75abd762549f597d3beb29",
+  "baseImageId": "75be629da54467b4cda2ab1597a9b3c9a3fa64f0dd4644bf86bce1c7ef4869f7",
+  "baseRecipeCommit": "03aa1130488a6532b348cd8dd70381f06ef50a84",
+  "baseImage": "docker.io/library/archlinux@sha256:a26046b7363dad8e2614858f4313949ae9b05c9c5f31de343a54864b9e20806f",
+  "baseArchSnapshot": "2026/08/29",
+  "additionalSignedInputs": 139,
+  "inputLockSha256": "93fe36cf992eb049d2135d31c5df9c0b50f722936064c7d2ab3a894a1c0523aa",
+  "sourceDateEpoch": 1790419200,
+  "coreModel": "uninstalled-exact-staged-sdk-with-complete-dependency-gate",
+  "runtimeImage": false,
+  "firstPartyInstalled": false
+}
